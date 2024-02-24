@@ -1,6 +1,6 @@
 {
   "name": "decentralized-payments",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A simplified client to integrate payment system for cosmos blockchains",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
