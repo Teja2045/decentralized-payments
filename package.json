@@ -1,0 +1,32 @@
+{
+  "name": "decentralized-payments",
+  "version": "0.0.0",
+  "description": "A simplified client to integrate payment system for cosmos blockchains",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Teja2045/decentralized-payments.git"
+  },
+  "keywords": [
+    "decentralized-payments",
+    "crypto",
+    "crypto-payments",
+    "cosmos"
+  ],
+  "author": "saiteja <tejargukt123@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Teja2045/decentralized-payments/issues"
+  },
+  "homepage": "https://github.com/Teja2045/decentralized-payments#readme",
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
+  }
+}
