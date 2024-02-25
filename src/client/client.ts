@@ -1,66 +1,93 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
-import { paymentClientOption } from "../types";
+import { PaymentClientOption, PaymentRequest } from "../types";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import {
+  ERR_CHAIN_NOT_SUPPORTED,
+  ERR_WALLET_NOT_INSTALLED,
+} from "../utils/errors";
+let networks = require("../resources/networks.json");
 
 declare let window: WalletWindow;
 
-export const getPaymentClient = (clientOptions?: paymentClientOption) => {
-  const paymentClient = () => {
-    const signer = getSigner(clientOptions);
-    const makePayment = async (
-      chainID: string,
-      from: string,
-      to: string,
-      amount: number,
-      denom: string
-    ) => {
-      let resultTxHash;
-
-      const address = (await signer.getAccounts())[0].address;
-
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        "https://rpc.mainnet.desmos.network",
-        signer
-      );
-      
-      console.log(
-        "With signing client, chain id:",
-        await signingClient.getChainId(),
-        ", height:",
-        await signingClient.getHeight()
-      );
-
-      const result = await signingClient.sendTokens(
-        from,
-        to,
-        [{ denom: denom, amount: "" + amount }],
-        "auto"
-      );
-
-      resultTxHash = result.transactionHash;
-
-      result.code === 0 && clientOptions?.onTxSuccess?.(chainID, resultTxHash);
-
-      if (!resultTxHash || result.code !== 0)
-        throw new Error("payment unsuccessful");
-      return resultTxHash;
-    };
-
-    return { makePayment: makePayment };
-  };
-
-  return paymentClient;
+const isChainSupported = (chainID: string) => {
+  return !!networks[chainID];
 };
 
-const getSigner = (clientOptions?: paymentClientOption) => {
+/*
+  either build a wallet for signing from mnemonic or
+  use keplr offlineSigner  
+*/
+export const getPaymentClient = async (
+  chainID: string,
+  clientOptions?: PaymentClientOption
+) => {
+  /*
+    Todo: add support for more chains
+  */
+  if (!isChainSupported(chainID))
+    throw new Error(chainID + " " + ERR_CHAIN_NOT_SUPPORTED);
+
+  const chainInfo = networks[chainID];
+  const signer = await getSigner(chainID, clientOptions);
+
+  const makePayment = async (paymentRequest: PaymentRequest) => {
+    let resultTxHash;
+
+    const signingClient = await SigningStargateClient.connectWithSigner(
+      chainInfo.rpc,
+      signer
+    );
+
+    const { from, to, denom, amount } = paymentRequest;
+
+    const result = await signingClient.sendTokens(
+      from,
+      to,
+      [{ denom: denom, amount: "" + amount }],
+
+      /* 
+        constant gas for now
+        Todo: make it dynamic 
+      */
+      {
+        amount: [{ denom: denom, amount: "5000" }],
+        gas: "200000",
+      }
+    );
+
+    console.log("result", result);
+
+    resultTxHash = result.transactionHash;
+
+    /*
+      if the payment is successful, invoke the callback (eg: hit the server endpoint to confirm the payment)
+    */
+    result.code === 0 && clientOptions?.onTxSuccess?.(chainID, resultTxHash);
+
+    if (!resultTxHash || result.code !== 0)
+      throw new Error("payment unsuccessful");
+
+    return resultTxHash;
+  };
+
+  return { makePayment: makePayment };
+};
+
+const getSigner = async (
+  chainID: string,
+  clientOptions?: PaymentClientOption
+) => {
   let signer;
   if (clientOptions?.useMnemonic) {
-    signer = DirectSecp256k1HdWallet.fromMnemonic(clientOptions.mnemonic);
+    signer = await DirectSecp256k1HdWallet.fromMnemonic(
+      clientOptions.mnemonic,
+      { prefix: networks[chainID].prefix }
+    );
   } else {
-    signer = window.keplr;
+    signer = window.keplr?.getOfflineSigner(chainID);
   }
 
-  if (!signer) throw new Error("kepler wallet is not installed..");
+  if (!signer) throw new Error(ERR_WALLET_NOT_INSTALLED);
 
   return signer;
 };

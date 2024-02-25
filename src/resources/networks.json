@@ -1,0 +1,26 @@
+{
+  "osmosis-1": {
+    "rpc": "https://osmosis-rpc.polkachu.com",
+    "rest": "https://osmosis-api.polkachu.com",
+    "prefix": "osmo",
+    "display": "OSMO",
+    "minimalDenom": "uosmo",
+    "decimals": 6
+  },
+  "cosmoshub-4": {
+    "rpc": "https://cosmos-rpc.polkachu.com",
+    "rest": "https://rest-cosmoshub.ecostake.com",
+    "prefix": "uatom",
+    "display": "ATOM",
+    "minimalDenom": "uatom",
+    "decimals": 6
+  },
+  "celestia": {
+    "rpc": "https://celestia-rpc.polkachu.com",
+    "rest": "https://api.celestia.nodestake.top",
+    "prefix": "celestia",
+    "symbol": "TIA",
+    "minimalDenom": "utia",
+    "decimals": 6
+  }
+}
