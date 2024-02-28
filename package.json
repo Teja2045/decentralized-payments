@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@cosmjs/proto-signing": "^0.31.0",
-    "@cosmjs/stargate": "^0.32.2"
+    "@cosmjs/stargate": "^0.32.2",
+    "axios": "^1.6.7"
   }
 }

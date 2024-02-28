@@ -9,6 +9,7 @@ let networks = require("../resources/networks.json");
 
 declare let window: WalletWindow;
 
+/* check if the we are supporting the given chain */
 const isChainSupported = (chainID: string) => {
   return !!networks[chainID];
 };
@@ -28,8 +29,11 @@ export const getPaymentClient = async (
     throw new Error(chainID + " " + ERR_CHAIN_NOT_SUPPORTED);
 
   const chainInfo = networks[chainID];
+
+  /* signers to sign the transactions */
   const signer = await getSigner(chainID, clientOptions);
 
+  /* callback to make the payments */
   const makePayment = async (paymentRequest: PaymentRequest) => {
     let resultTxHash;
 
@@ -38,8 +42,9 @@ export const getPaymentClient = async (
       signer
     );
 
-    const { from, to, denom, amount } = paymentRequest;
+    const { from, to, denom, amount, memo } = paymentRequest;
 
+    /* send transaction */
     const result = await signingClient.sendTokens(
       from,
       to,
@@ -52,7 +57,8 @@ export const getPaymentClient = async (
       {
         amount: [{ denom: denom, amount: "5000" }],
         gas: "200000",
-      }
+      },
+      memo
     );
 
     console.log("result", result);

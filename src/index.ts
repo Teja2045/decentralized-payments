@@ -1,4 +1,5 @@
-export * from "./client/client"
+export * from "./client/paymentClient"
 export * from "./types"
 export * from "./resources/networks"
 export * from "./utils/errors"
+export * from "./server/PaymentValidationClient"
