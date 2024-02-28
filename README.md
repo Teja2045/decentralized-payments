@@ -37,9 +37,13 @@ const client = await getPaymentClient("osmosis-1", {
 
 ```
 
-Note: It is advised to use the first version as it is more secure
+    Note: It is advised to use the first version as it is more secure
 
-- pass in a callback in case you want perform some effects if the the transaction is successful or you want to hit the payment verification endpoint on the server
+
+
+### Side effect on payment success
+
+ pass in a callback in case you want perform some effects if the the transaction is successful or you want to hit the payment verification endpoint on the server
 
 ```
 const informServer = (chainID: string, txHash: string) => {
@@ -66,6 +70,7 @@ const client2 = await getPaymentClient("osmosis-1", {
 ### To make payment
 
 ```
+// These are minimal mandatory fields for a payment system to work
     const txHash = await client.makePayment({
       from: yourChainAddress,
       to: productOwnerChainAddress,
@@ -76,7 +81,7 @@ const client2 = await getPaymentClient("osmosis-1", {
 
 ```
 
-The above field's are mandatory for a to integrate a payment system
+
 
 ### Memo to communication params between frontend and server
 
@@ -87,7 +92,8 @@ The above field's are mandatory for a to integrate a payment system
 Example:
 
 ```
-    // lets say the product is video which requires a gmail address of the buyer
+    // lets say the product is a video
+    // the server needs the gmail address of the buyers to sent the video after confirming the payment
 
     interface Params {
         gmail: string
@@ -109,7 +115,10 @@ Example:
     const gmail = params.gmail
 
 ```
-
+<br>
+<br>
+<br>
+<br>
 ## On server
 
 ### To get validation Client
