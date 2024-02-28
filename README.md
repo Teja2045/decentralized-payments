@@ -39,11 +39,9 @@ const client = await getPaymentClient("osmosis-1", {
 
     Note: It is advised to use the first version as it is more secure
 
-
-
 ### Side effect on payment success
 
- pass in a callback in case you want perform some effects if the the transaction is successful or you want to hit the payment verification endpoint on the server
+pass in a callback in case you want perform some effects if the the transaction is successful or you want to hit the payment verification endpoint on the server
 
 ```
 const informServer = (chainID: string, txHash: string) => {
@@ -81,8 +79,6 @@ const client2 = await getPaymentClient("osmosis-1", {
 
 ```
 
-
-
 ### Memo to communication params between frontend and server
 
     Memo: protocolParams
@@ -115,10 +111,12 @@ Example:
     const gmail = params.gmail
 
 ```
+
 <br>
 <br>
 <br>
 <br>
+
 ## On server
 
 ### To get validation Client
@@ -170,7 +168,7 @@ const onSuccess = (params) => {
 };
 ```
 
-### To verify the payment
+### Call the payment verification and processing method
 
 Example:
 
