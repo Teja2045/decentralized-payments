@@ -20,3 +20,14 @@ export interface PaymentRequest {
   denom: string;
   memo: string;
 }
+
+export interface isValidTxParams {
+  amount: number;
+  recipient: string;
+}
+
+export interface processPaymentParams {
+  txHash: string;
+  isValidPayment: ({ amount, recipient }: isValidTxParams) => boolean;
+  onPaymentSuccess: (params: any) => void;
+}

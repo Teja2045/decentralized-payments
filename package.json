@@ -1,6 +1,6 @@
 {
   "name": "decentralized-payments",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "A simplified client to integrate payment system for cosmos blockchains",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@cosmjs/proto-signing": "^0.31.0",
-    "@cosmjs/stargate": "^0.32.2"
+    "@cosmjs/stargate": "^0.32.2",
+    "axios": "^1.6.7"
   }
 }
